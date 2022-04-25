@@ -26,7 +26,7 @@ const validatorCreateItem = [
     .exists()
     .notEmpty(),
 
-    check("artist.nacionality")
+    check("artist.nationality")
     .exists()
     .notEmpty(),
 
