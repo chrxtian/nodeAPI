@@ -27,7 +27,6 @@ const MEDIA_PATH = `${__dirname}/../storage`;
  const getItem = async (req, res) => {
   try {    
     const {id} = matchedData(req);
-    console.log(id)
     const data = await storagesModel.findById(id);    
     res.send(data);
   } catch (error) {
@@ -41,28 +40,18 @@ const MEDIA_PATH = `${__dirname}/../storage`;
  * @param {*} res 
  */
 const createItem = async (req, res) => {
-  const { body, file } = req;
-  const fileData = {
-    filename: file.filename,
-    url: `${PUBLIC_URL}/${file.filename}`
-  };
-
-  const data = await storagesModel.create(fileData)
-  res.send(data)
-};
-
-/**
- * actualizar un registro de la base de datos
- * @param {*} req 
- * @param {*} res 
- */
- const updateItem = async (req, res) => {
   try {
-
-    res.send(data)    
+    const { file } = req;
+    const fileData = {
+      filename: file.filename,
+      url: `${PUBLIC_URL}/${file.filename}`
+    };
+    const data = await storagesModel.create(fileData)
+    res.send(data)  
   } catch (error) {
-    
+    handleHttpError(res, 'ERROR_CREATE_ITEM', 500)
   }
+  
 };
 
 /**
@@ -74,7 +63,7 @@ const createItem = async (req, res) => {
   try {
     const {id} = matchedData(req);
     const fileData = await storagesModel.findById(id);
-    await storagesModel.deleteOne(id);
+    await storagesModel.deleteOne({ "_id" : id });
     const {filename} = fileData;
     const filePath = `${MEDIA_PATH}/${filename}`;
     fs.unlinkSync(filePath);
@@ -84,9 +73,10 @@ const createItem = async (req, res) => {
     };
     res.send(data);
   } catch (error) {
+    console.error(error);
     handleHttpError(res, 'ERROR_DELETE_ITEM', 500)
   }
  };
 
 
- module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+ module.exports = { getItems, getItem, createItem, deleteItem };

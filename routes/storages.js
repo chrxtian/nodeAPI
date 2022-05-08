@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const uploadMiddleware = require("../utils/handleStorage");
 const { validatorGetItem } = require('../validators/storage');
-const { getItems, getItem, createItem, updateItem, deleteItem } = require("../controllers/storages")
+const { getItems, getItem, createItem, deleteItem } = require("../controllers/storages")
 
 /**
  * Get items
