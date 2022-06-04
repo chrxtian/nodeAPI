@@ -1,6 +1,5 @@
 const express = require("express");
-const { matchedData } = require('express-validator');
-const { encrypt, compare } = require("../utils/handlePassword");
+const { registerController, loginController } = require("../controllers/auth");
 const router = express.Router();
 
 const { validatorRegister, validatorLogin } = require('../validators/auth');
@@ -8,13 +7,9 @@ const { validatorRegister, validatorLogin } = require('../validators/auth');
 /**
  * Create item
  */
-router.post("/register", validatorRegister, async (req, res) => {
-  req = matchedData(req);
-  const passwordHahed = await encrypt(req.password);  
-  // Creating new object and replacing password by password hashed
-  const body = {...req, password: passwordHahed};
-  res.send({data: body});
-});
+router.post("/register", validatorRegister, registerController);
+
+router.post("/login", validatorLogin, loginController);
 
 
 module.exports = router;
